@@ -24,23 +24,24 @@ class Booker:
         repeat = self.REPETITIONS
         while repeat:
             repeat -= 1
-            print(datetime.now())
+            now = datetime.now()
+            print(now)
             res = post(self.url, json=body, headers=headers)
 
             msg = json.loads(res.text)
 
-            if res.status_code == 201:
+            if res.status_code == 201:  # Booking OK
                 if msg['type'] == 'groupActivityBooking':
-                    return "Booked"
+                    return f'Booked at {now} after {self.REPETITIONS - repeat} tries'
                 elif msg['type'] == 'waitingListBooking':
                     pos = msg['waitingListBooking']['waitingListPosition']
-                    return f'Waiting list Pos: {pos}'
+                    return f'Waiting list Pos: {pos} at {now} after {self.REPETITIONS - repeat} tries'
             elif res.status_code == 403:
                 if msg['errorCode'] == 'TOO_EARLY_TO_BOOK':
                     wait_until_8_oclock()
-                elif msg['errorCode'] == 'ALREADY_BOOKED':
-                    raise (BookingError('ALREADY_BOOKED'))
-            else:
-                print(res.status_code, res.text)
+                elif msg['errorCode'] == 'ALREADY_BOOKED' \
+                        or msg['errorCode'] == 'ALREADY_ON_WAITING_LIST' \
+                        or msg['errorCode'] == 'BOOKING_CLASHES_WITH_OTHER_BOOKING':
+                    raise (BookingError(msg['errorCode'] + " " + str(workout)))
 
         raise BookingError(f'Tried {self.REPETITIONS} times without success')
