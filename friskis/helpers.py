@@ -36,3 +36,21 @@ def wait_until_8_oclock():
         sleep_time = (target - now).total_seconds()
         print(f'Sleeping for {sleep_time} seconds')
         time.sleep(sleep_time)
+
+
+def send_mail(subject, status, recipients, user, password):
+    """Send email to user through gmail account."""
+    import smtplib
+
+    print('Sending mail')
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+    server.login(user, password)
+    header = f'Subject: {subject}'
+    msg = header + '\n\n ' + status
+    server.sendmail('friskisnotifyer@gmail.com',
+                    recipients, msg.encode('utf-8'))
+    server.quit()
+    print('Mail sent')
