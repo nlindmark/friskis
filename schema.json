@@ -1,8 +1,13 @@
 [
   {
-    "day": "Tuesday",
+    "day": "Sunday",
     "name": "Spin",
-    "time": "17:15"
+    "time": "17:30"
+  },
+  {
+    "day": "Thursday",
+    "name": "Spin",
+    "time": "17:30"
   },
   {
     "day": "Wednesday",

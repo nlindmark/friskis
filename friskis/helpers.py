@@ -50,7 +50,8 @@ def send_mail(subject, status, recipients, user, password):
     server.login(user, password)
     header = f'Subject: {subject}'
     msg = header + '\n\n ' + status
-    server.sendmail('friskisnotifyer@gmail.com',
-                    recipients, msg.encode('utf-8'))
+    server.sendmail(user,
+                    recipients,
+                    msg.encode('utf-8'))
     server.quit()
     print('Mail sent')

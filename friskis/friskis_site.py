@@ -25,9 +25,9 @@ class FriskisSite:
             response.raise_for_status()
         return response
 
-    def get_workouts_in_3_days(self, token):
-        """Retrieve all workouts scheduled in 3 days."""
-        date_string = get_date_string(2)
+    def get_upcoming_workouts(self, token, days_ahead):
+        """Retrieve all workouts scheduled in day_ahead days."""
+        date_string = get_date_string(days_ahead - 1)
         url = self.activitiesUrl + date_string + '&webCategory=1'
         auth = {'Authorization': 'Bearer ' + token}
         response = get(url, json=auth)

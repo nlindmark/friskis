@@ -16,21 +16,22 @@ if __name__ == '__main__':
     parser.add_argument('--schema', required=True, type=str, help='The workout schema json file')
     args = parser.parse_args()
 
-    site2url = {'Lidkoping': 'https://fslidkoping.brpsystems.com/brponline/api/ver3'}
+    site2url = {'Lidkoping': ['https://fslidkoping.brpsystems.com/brponline/api/ver3', 3],
+                'Trollhattan': ['https://arenaalvhogsborg.brpsystems.com/brponline/api/ver3', 7]}
 
-    site = FriskisSite(site2url[args.site])
+    site = FriskisSite(site2url[args.site][0])
     with open(args.credentials, 'r', encoding='utf8') as infile:
         cred = json.load(infile)
 
     try:
         response = site.login(cred['login']['user'], cred['login']['password'])
         token = get_access_token(response.text)
-        workouts_in_3_days = site.get_workouts_in_3_days(token)
+        upcoming_workouts = site.get_upcoming_workouts(token, site2url[args.site][1])
         my_workouts = Schema.parse(args.schema)
-        matched_workouts = [workout for workout in workouts_in_3_days if workout in my_workouts]
+        matched_workouts = [workout for workout in upcoming_workouts if workout in my_workouts]
 
         if matched_workouts:
-            b = Booker(site2url[args.site], token)
+            b = Booker(site2url[args.site][0], token)
             for m in matched_workouts:
                 status = b.book(m)
                 print(f'Status: {status}')
