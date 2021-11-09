@@ -10,9 +10,9 @@ from .helpers import wait_until_8_oclock
 class Booker:
     """A class for workout bookings."""
 
-    def __init__(self, url, token):
+    def __init__(self, url, customer_id, token):
         """Init the Booker."""
-        self.url = url + '/customers/7283/bookings/groupactivities'
+        self.url = f'{url}/customers/{customer_id}/bookings/groupactivities'
         self.token = token
         self.REPETITIONS = 12
 

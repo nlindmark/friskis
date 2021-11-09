@@ -30,7 +30,7 @@ class FriskisSite:
         date_string = get_date_string(days_ahead - 1)
         url = self.activitiesUrl + date_string + '&webCategory=1'
         auth = {'Authorization': 'Bearer ' + token}
-        response = get(url, json=auth)
+        response = get(url)
         activities = json.loads(response.text)
 
         workouts = []
